@@ -50,9 +50,7 @@ def dirindex(page):
         path = page[:-5]
     path = path or '.'
     path += '/'
-    print("index of %s" % path)
     for f in os.listdir(path):
-        print(f)
         if os.path.isdir(f):
             md += "* [%s%s]\n" % (path, f)
         if f.endswith('index.md'):
