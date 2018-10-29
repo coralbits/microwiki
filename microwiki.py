@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask
+from flask import Flask, send_file
 import os
 import markdown
 import re
@@ -74,8 +74,13 @@ def sideindex(page):
 
 
 def render_page(page):
-    print(page)
-    pagedata = read_page(page)
+    assert '..' not in page
+
+    try:
+        pagedata = read_page(page)
+    except Exception:
+        return send_file(os.path.join(os.getcwd(), page))
+
     pagedata = link_re.sub(lambda x: replacelink(x, page), pagedata)
 
     md = markdown.markdown(pagedata)
