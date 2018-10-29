@@ -91,6 +91,7 @@ def render_page(page):
         "body": md,
         "breadcrumbs": breadcrumbs(page),
         "index": sideindex(page),
+        "url": '/' + page,
     })
 
 
