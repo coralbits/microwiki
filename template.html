@@ -9,7 +9,12 @@
     </style>
   </head>
   <body>
-    <a href="/">Back</a>
-    {{body|safe}}
+    <div>
+      <a href="/">wiki</a> /
+      {% for p in breadcrumbs %}
+        <a href="{{p.url}}">{{p.label}}</a> /
+      {% endfor %}
+    </div>
+      {{body|safe}}
   </body>
 </html>

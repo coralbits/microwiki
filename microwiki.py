@@ -45,25 +45,44 @@ def get_title(page):
 
 def dirindex(page):
     md = ""
-    dn = os.path.dirname(page) or '.'
-    for f in os.listdir(dn):
+    path = page
+    if page.endswith('index'):
+        path = page[:-5]
+    path = path or '.'
+    path += '/'
+    print("index of %s" % path)
+    for f in os.listdir(path):
+        print(f)
         if os.path.isdir(f):
-            f = f+'/index.md'
+            md += "* [%s%s]\n" % (path, f)
+        if f.endswith('index.md'):
+            continue
         if f.endswith('.md'):
-            md += "* [%s]\n" % (f[:-3])
+            md += "* [%s%s]\n" % (path, f[:-3])
 
     return md
 
 
 def replacelink(link, orig):
     path = link[2]
-    title = get_title(os.path.join(os.path.dirname(orig), path))
+    title = get_title(path)
     pre = link[1]
+    post = link[3]
 
-    return "%s[%s](%s)" % (pre, title, path)
+    if path.startswith('http://') or path.startswith('https://'):
+        return "%s[%s]%s" % (pre, path, post)
+
+    return "%s[%s](/%s)%s" % (pre, title, path, post)
 
 
-link_re = re.compile(r'([^\)])\[(.*?)\]')
+link_re = re.compile(r'([^\)])\[(.*?)\]([^\(])')
+
+
+def breadcrumbs(url):
+    current = []
+    for p in url.split('/'):
+        current.append(p)
+        yield {"url": '/' + '/'.join(current), "label": p}
 
 
 def render_page(page):
@@ -79,7 +98,8 @@ def render_page(page):
     return template.render({
         "page": page,
         "title": get_title(page),
-        "body": md
+        "body": md,
+        "breadcrumbs": breadcrumbs(page)
     })
 
 
