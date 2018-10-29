@@ -3,18 +3,59 @@
     <title>{{title}}</title>
     <style>
       body{
+        background: #eee;
+        display: grid;
+        grid-template-columns: 20em auto;
+        margin: 0;
+        height: 100vh;
+      }
+      div.sidebar{
+        background: white;
+      }
+      div.sidebar > *{
+        padding: 1em;
+        border-bottom: 1px solid #333;
+        display: block;
+        color: blue;
+        text-decoration: none;
+      }
+      div.sidebar > a:hover{
+        background: #eee;
+      }
+
+      div.body{
         max-width: 600px;
-        margin: 3em auto;
+        margin: auto;
+        background: white;
+        padding: 3em;
+      }
+      div.main{
+        overflow: auto;
+      }
+      code {
+        background: #efefef;
+        display: block;
+        white-space: pre;
+        overflow: auto;
       }
     </style>
   </head>
   <body>
-    <div>
-      <a href="/">wiki</a> /
-      {% for p in breadcrumbs %}
-        <a href="{{p.url}}">{{p.label}}</a> /
+    <div class="sidebar">
+      <div>
+        <a href="/">wiki</a> /
+        {% for p in breadcrumbs %}
+          <a href="{{p.url}}">{{p.label}}</a> /
+        {% endfor %}
+      </div>
+      {% for p in index %}
+        <a href="{{p.url}}">{{p.label}}</a>
       {% endfor %}
     </div>
-      {{body|safe}}
+    <div class="main">
+      <div class="body">
+        {{body|safe}}
+      </div>
+    </div>
   </body>
 </html>
